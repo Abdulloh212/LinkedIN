@@ -50,6 +50,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 "/api/like",
+                                "/api/announcement/education/accept",
+                                "/api/announcement/work/accept",
                                 "/api/unlike",
                                 "/api/liked-by/**",
                                 "/api/post/**",
