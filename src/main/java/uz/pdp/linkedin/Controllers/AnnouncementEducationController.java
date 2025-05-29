@@ -12,6 +12,8 @@ import uz.pdp.linkedin.Repo.AnnouncementEduRepository;
 import uz.pdp.linkedin.Repo.EducationRepository;
 import uz.pdp.linkedin.Repo.UserRepository;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/announcement/education")
 @RequiredArgsConstructor
@@ -45,6 +47,21 @@ public class AnnouncementEducationController {
     @GetMapping("/company/{id}")
     public HttpEntity<?> getWork(@PathVariable Integer id) {
         return ResponseEntity.ok(announcementEduRepository.findByEducationCompanyId(id));
+    }
+
+    @PostMapping("/accept")
+    public HttpEntity<?>verify(@RequestBody Integer id){
+        Optional<AnnouncementEdu> byId = announcementEduRepository.findById(id);
+        if (byId.isPresent()) {
+            AnnouncementEdu announcementEdu = byId.get();
+            Education education = educationRepository.findById(byId.get().getEducation().getId()).orElse(null);
+            if (education == null) return ResponseEntity.badRequest().build();
+            education.setIsAccepted(true);
+            announcementEduRepository.delete(announcementEdu);
+            return ResponseEntity.ok(educationRepository.save(education));
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

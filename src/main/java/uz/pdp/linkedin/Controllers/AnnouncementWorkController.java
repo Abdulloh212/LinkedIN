@@ -42,8 +42,6 @@ public class AnnouncementWorkController {
         AnnouncementWork saved = announcementWorkRepository.save(announcementWork1);
         return ResponseEntity.ok(saved);
     }
-
-
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable Integer id) {
         if (!announcementWorkRepository.existsById(id)) return ResponseEntity.notFound().build();
@@ -53,5 +51,19 @@ public class AnnouncementWorkController {
     @GetMapping("/company/{id}")
     public HttpEntity<?> getWork(@PathVariable Integer id) {
         return ResponseEntity.ok(announcementWorkRepository.findByWorkCompanyId(id));
+    }
+    @PostMapping("/accept")
+    public HttpEntity<?>verify(@RequestBody Integer id){
+        Optional<AnnouncementWork> byId = announcementWorkRepository.findById(id);
+        if (byId.isPresent()) {
+            AnnouncementWork announcementWork = byId.get();
+            Work work = workRepository.findById(byId.get().getWork().getId()).orElse(null);
+            if (work == null) return ResponseEntity.badRequest().build();
+            work.setIsAccepted(true);
+            announcementWorkRepository.delete(announcementWork);
+            return ResponseEntity.ok(workRepository.save(work));
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

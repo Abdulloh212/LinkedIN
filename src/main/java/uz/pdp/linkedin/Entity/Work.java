@@ -17,7 +17,6 @@ import java.util.List;
 public class Work extends BaseEntity {
     @ManyToOne
     private User company;
-
     private String address;
     private String position;
     private Date startDate;
