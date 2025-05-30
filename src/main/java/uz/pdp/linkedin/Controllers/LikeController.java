@@ -22,7 +22,7 @@ public class LikeController {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
-    @GetMapping("/liked-by/{userId}")
+    @GetMapping("/liked/{userId}")
     public ResponseEntity<List<Post>> getPostsLikedByUser(@PathVariable Integer userId) {
         List<Post> posts = postRepository.findAllByLikedUserId(userId);
         return ResponseEntity.ok(posts);

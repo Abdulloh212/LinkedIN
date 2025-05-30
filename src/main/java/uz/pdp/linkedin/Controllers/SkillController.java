@@ -23,14 +23,10 @@ public class SkillController {
         return ResponseEntity.ok(savedSkill);
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<List<Skill>> searchSkills(@RequestParam String keyword) {
         List<Skill> results = skillRepository.findBySkillContainingIgnoreCase(keyword);
         return ResponseEntity.ok(results);
-    }
-    @GetMapping
-    public ResponseEntity<List<Skill>> getSkills() {
-       return ResponseEntity.ok(skillRepository.findAll());
     }
 
     @GetMapping("/{id}")

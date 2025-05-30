@@ -53,7 +53,6 @@ public class JwtService {
                 .compact();
     }
 
-
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
